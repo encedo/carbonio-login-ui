@@ -12,7 +12,7 @@ import { HttpResponse, JsonBodyType } from 'msw';
 import { setup } from './testUtils';
 import { App } from '../app';
 import { CARBONIO_CE_SUPPORTED_BROWSER_LINK, CARBONIO_SUPPORTED_BROWSER_LINK } from '../constants';
-import { advancedSupportedApi, APIInterceptor, createAPIInterceptor } from '../jest-env-setup';
+import { advancedSupportedApi, APIInterceptor, createAPIInterceptor } from '../vitest-env-setup';
 
 function apiMinMaxVersions(version: number): APIInterceptor {
 	return createAPIInterceptor('get', '/zx/login/supported', () =>

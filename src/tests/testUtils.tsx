@@ -25,6 +25,7 @@ import i18next, { type i18n } from 'i18next';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
+import type { MockInstance } from 'vitest';
 
 import { ThemeProvider } from '../theme-provider/theme-provider';
 
@@ -205,7 +206,10 @@ export const setup = (
 	ui: ReactElement,
 	options?: SetupOptions
 ): { user: UserEvent } & ReturnType<typeof customRender> => ({
-	user: setupUserEvent({ advanceTimers: jest.advanceTimersByTime, ...options?.setupOptions }),
+	user: setupUserEvent({
+		advanceTimers: vi.advanceTimersByTime.bind(vi),
+		...options?.setupOptions
+	}),
 	...customRender(ui, {
 		initialRouterEntries: options?.initialRouterEntries,
 		...options?.renderOptions
@@ -214,24 +218,28 @@ export const setup = (
 
 export function makeListItemsVisible(): void {
 	const { calls, instances } = (
-		window.IntersectionObserver as jest.Mock<
-			IntersectionObserver,
-			[callback: IntersectionObserverCallback, options?: IntersectionObserverInit]
+		window.IntersectionObserver as unknown as MockInstance<
+			(
+				callback: IntersectionObserverCallback,
+				options?: IntersectionObserverInit
+			) => IntersectionObserver
 		>
 	).mock;
-	calls.forEach((call, index) => {
-		const [onChange] = call;
-		// trigger the intersection on the observed element
-		act(() => {
-			onChange(
-				[
-					{
-						intersectionRatio: 0,
-						isIntersecting: true
-					} as IntersectionObserverEntry
-				],
-				instances[index]
-			);
-		});
-	});
+	calls.forEach(
+		(call: [IntersectionObserverCallback, IntersectionObserverInit?], index: number) => {
+			const [onChange] = call;
+			// trigger the intersection on the observed element
+			act(() => {
+				onChange(
+					[
+						{
+							intersectionRatio: 0,
+							isIntersecting: true
+						} as IntersectionObserverEntry
+					],
+					instances[index] as IntersectionObserver
+				);
+			});
+		}
+	);
 }

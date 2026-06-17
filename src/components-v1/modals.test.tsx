@@ -12,11 +12,11 @@ import { setup } from '../tests/testUtils';
 
 describe('modals', () => {
 	test('loads modal screen', async () => {
-		const onCloseFn = jest.fn();
+		const onCloseFn = vi.fn();
 		const open = true;
 		setup(<OfflineModal open={open} onClose={onCloseFn} />);
 		act(() => {
-			jest.runOnlyPendingTimers();
+			vi.runOnlyPendingTimers();
 		});
 		expect(screen.getByText('Offline')).toBeVisible();
 

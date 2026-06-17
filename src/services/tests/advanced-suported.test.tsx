@@ -6,7 +6,7 @@
 
 import { HttpResponse } from 'msw';
 
-import { advancedSupportedApi } from '../../jest-env-setup';
+import { advancedSupportedApi } from '../../vitest-env-setup';
 import { getAdvancedSupported } from '../advanced-supported';
 
 const okStatuses = [200, 201, 202];

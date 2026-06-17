@@ -12,113 +12,97 @@ import { generateOtp, postV2Login, submitOtp } from '../services/v2-service';
 import { setup } from '../tests/testUtils';
 import { saveCredentials } from '../utils';
 
-jest.mock('../services/v2-service');
-jest.mock('../utils', () => ({
-	saveCredentials: jest.fn()
+vi.mock('../services/v2-service');
+vi.mock('../utils', () => ({
+	saveCredentials: vi.fn()
 }));
 
-jest.mock(
-	'./credentials-form',
-	() =>
-		function CredentialsFormMock({ submitCredentials }) {
-			return (
-				<div data-testid="credentials-form">
-					<button
-						type="button"
-						data-testid="submit-credentials"
-						onClick={() => submitCredentials('user@example.com', 'password123')}
-					>
-						submit
-					</button>
-				</div>
-			);
-		}
-);
+vi.mock('./credentials-form', () => ({
+	default: function CredentialsFormMock({ submitCredentials }) {
+		return (
+			<div data-testid="credentials-form">
+				<button
+					type="button"
+					data-testid="submit-credentials"
+					onClick={() => submitCredentials('user@example.com', 'password123')}
+				>
+					submit
+				</button>
+			</div>
+		);
+	}
+}));
 
-jest.mock(
-	'./otp-wizard',
-	() =>
-		function OtpWizardMock({ onProceed }) {
-			return (
-				<div data-testid="otp-wizard">
-					<button
-						type="button"
-						data-testid="otp-wizard-proceed"
-						onClick={() => onProceed('OfficePhone')}
-					>
-						proceed
-					</button>
-				</div>
-			);
-		}
-);
+vi.mock('./otp-wizard', () => ({
+	default: function OtpWizardMock({ onProceed }) {
+		return (
+			<div data-testid="otp-wizard">
+				<button
+					type="button"
+					data-testid="otp-wizard-proceed"
+					onClick={() => onProceed('OfficePhone')}
+				>
+					proceed
+				</button>
+			</div>
+		);
+	}
+}));
 
-jest.mock(
-	'./otp-setup',
-	() =>
-		function OtpSetupMock({ otpUri, verifyError, attemptsRemaining, onVerifyCode, onBack }) {
-			return (
-				<div data-testid="otp-setup">
-					<div data-testid="otp-setup-uri">{otpUri}</div>
-					<div data-testid="otp-setup-error">{verifyError}</div>
-					<div data-testid="otp-setup-attempts">{String(attemptsRemaining)}</div>
-					<button
-						type="button"
-						data-testid="otp-setup-verify"
-						onClick={() => onVerifyCode('123456', true)}
-					>
-						verify
-					</button>
-					<button type="button" data-testid="otp-setup-back" onClick={onBack}>
-						back
-					</button>
-				</div>
-			);
-		}
-);
+vi.mock('./otp-setup', () => ({
+	default: function OtpSetupMock({ otpUri, verifyError, attemptsRemaining, onVerifyCode, onBack }) {
+		return (
+			<div data-testid="otp-setup">
+				<div data-testid="otp-setup-uri">{otpUri}</div>
+				<div data-testid="otp-setup-error">{verifyError}</div>
+				<div data-testid="otp-setup-attempts">{String(attemptsRemaining)}</div>
+				<button
+					type="button"
+					data-testid="otp-setup-verify"
+					onClick={() => onVerifyCode('123456', true)}
+				>
+					verify
+				</button>
+				<button type="button" data-testid="otp-setup-back" onClick={onBack}>
+					back
+				</button>
+			</div>
+		);
+	}
+}));
 
-jest.mock(
-	'./backup-codes',
-	() =>
-		function BackupCodesMock({ staticOtpCodes }) {
-			return (
-				<div data-testid="backup-codes">{staticOtpCodes.map((entry) => entry.code).join(',')}</div>
-			);
-		}
-);
+vi.mock('./backup-codes', () => ({
+	default: function BackupCodesMock({ staticOtpCodes }) {
+		return (
+			<div data-testid="backup-codes">{staticOtpCodes.map((entry) => entry.code).join(',')}</div>
+		);
+	}
+}));
 
-jest.mock(
-	'./change-password-form',
-	() =>
-		function ChangePasswordFormMock() {
-			return <div data-testid="change-password-form" />;
-		}
-);
-jest.mock(
-	'./forget-password',
-	() =>
-		function ForgetPasswordMock() {
-			return <div data-testid="forget-password" />;
-		}
-);
-jest.mock(
-	'./modals',
-	() =>
-		function OfflineModalMock() {
-			return <div data-testid="offline-modal" />;
-		}
-);
-jest.mock(
-	'./spinner',
-	() =>
-		function SpinnerMock() {
-			return <div data-testid="spinner" />;
-		}
-);
+vi.mock('./change-password-form', () => ({
+	default: function ChangePasswordFormMock() {
+		return <div data-testid="change-password-form" />;
+	}
+}));
+vi.mock('./forget-password', () => ({
+	default: function ForgetPasswordMock() {
+		return <div data-testid="forget-password" />;
+	}
+}));
+vi.mock('./modals', () => ({
+	default: function OfflineModalMock() {
+		return <div data-testid="offline-modal" />;
+	}
+}));
+vi.mock('./spinner', () => ({
+	default: function SpinnerMock() {
+		return <div data-testid="spinner" />;
+	}
+}));
 
 describe('V2LoginManager', () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		saveCredentials.mockResolvedValue(undefined);
 	});
 
@@ -240,7 +224,7 @@ describe('V2LoginManager', () => {
 		await waitFor(() => {
 			expect(screen.getByTestId('backup-codes')).toBeInTheDocument();
 		});
-		expect(submitOtp).toHaveBeenCalledWith('generated-id', '123456', false);
+		expect(submitOtp).toHaveBeenCalledWith('generated-id', '123456', true);
 		expect(screen.getByTestId('backup-codes')).toHaveTextContent('CODE-A,CODE-B');
 	});
 

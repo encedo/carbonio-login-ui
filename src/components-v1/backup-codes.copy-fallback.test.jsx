@@ -9,15 +9,15 @@ import { render, screen, waitFor } from '@testing-library/react';
 
 import BackupCodes from './backup-codes';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
 	useTranslation: () => [(key, defaultText) => defaultText || key]
 }));
 
-jest.mock('../store/login/store', () => ({
+vi.mock('../store/login/store', () => ({
 	useLoginConfigStore: () => ({ loginLogo: undefined })
 }));
 
-jest.mock('@zextras/carbonio-design-system', () => ({
+vi.mock('@zextras/carbonio-design-system', () => ({
 	Button: ({ onClick, label, disabled, 'data-testid': dataTestId }) => (
 		<button type="button" onClick={onClick} disabled={disabled} data-testid={dataTestId}>
 			{label}
@@ -44,7 +44,7 @@ describe('BackupCodes copy fallback branches', () => {
 		originalClipboard = navigator.clipboard;
 		originalExecCommand = document.execCommand;
 		Object.defineProperty(document, 'execCommand', {
-			value: jest.fn().mockReturnValue(true),
+			value: vi.fn().mockReturnValue(true),
 			configurable: true
 		});
 	});
@@ -64,14 +64,14 @@ describe('BackupCodes copy fallback branches', () => {
 		render(
 			<BackupCodes
 				staticOtpCodes={[{ code: 'AAAA-BBBB' }, { code: 'CCCC-DDDD' }, { code: 'EEEE-FFFF' }]}
-				onLoginToWorkspace={jest.fn()}
+				onLoginToWorkspace={vi.fn()}
 			/>
 		);
 
 	test('covers textarea fallback when clipboard.writeText rejects', async () => {
 		Object.defineProperty(navigator, 'clipboard', {
 			value: {
-				writeText: jest.fn().mockRejectedValue(new Error('copy failed'))
+				writeText: vi.fn().mockRejectedValue(new Error('copy failed'))
 			},
 			configurable: true
 		});
@@ -79,14 +79,14 @@ describe('BackupCodes copy fallback branches', () => {
 
 		const originalCreateElement = document.createElement.bind(document);
 		const textAreaMock = originalCreateElement('textarea');
-		textAreaMock.select = jest.fn();
-		textAreaMock.remove = jest.fn();
-		const createElementSpy = jest
+		textAreaMock.select = vi.fn();
+		textAreaMock.remove = vi.fn();
+		const createElementSpy = vi
 			.spyOn(document, 'createElement')
 			.mockImplementation((tagName) =>
 				tagName === 'textarea' ? textAreaMock : originalCreateElement(tagName)
 			);
-		const appendChildSpy = jest
+		const appendChildSpy = vi
 			.spyOn(document.body, 'appendChild')
 			.mockImplementation(() => textAreaMock);
 
@@ -114,14 +114,14 @@ describe('BackupCodes copy fallback branches', () => {
 
 		const originalCreateElement = document.createElement.bind(document);
 		const textAreaMock = originalCreateElement('textarea');
-		textAreaMock.select = jest.fn();
-		textAreaMock.remove = jest.fn();
-		const createElementSpy = jest
+		textAreaMock.select = vi.fn();
+		textAreaMock.remove = vi.fn();
+		const createElementSpy = vi
 			.spyOn(document, 'createElement')
 			.mockImplementation((tagName) =>
 				tagName === 'textarea' ? textAreaMock : originalCreateElement(tagName)
 			);
-		const appendChildSpy = jest
+		const appendChildSpy = vi
 			.spyOn(document.body, 'appendChild')
 			.mockImplementation(() => textAreaMock);
 

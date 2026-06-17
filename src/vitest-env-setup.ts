@@ -6,23 +6,23 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { DefaultBodyType, http, HttpResponse, StrictRequest } from 'msw';
-import { SetupServer } from 'msw/lib/node';
+import { SetupServer } from 'msw/node';
 
 import server from './mocks/server';
 
 beforeEach(() => {
 	// Do not useFakeTimers with `whatwg-fetch` if using mocked server
 	// https://github.com/mswjs/msw/issues/448
-	jest.useFakeTimers();
+	vi.useFakeTimers({ shouldAdvanceTime: true });
 });
 beforeAll(() => server.listen());
 afterAll(() => server.close());
 afterEach(() => {
 	server.resetHandlers();
-	jest.runOnlyPendingTimers();
-	jest.useRealTimers();
+	vi.runOnlyPendingTimers();
+	vi.useRealTimers();
 });
 
 export const getSetupServer = (): SetupServer => server;
@@ -35,7 +35,7 @@ export type APIInterceptor = {
 export const createAPIInterceptor = (
 	method: 'get' | 'post',
 	url: string,
-	response: () => HttpResponse
+	response: () => HttpResponse<DefaultBodyType>
 ): APIInterceptor => {
 	let calledTimes = 0;
 	const requests: Array<StrictRequest<DefaultBodyType>> = [];
@@ -58,7 +58,7 @@ const advancedSupportedURL = '/services/catalog/services';
 export const advancedSupportedApi = {
 	withError: (): APIInterceptor =>
 		createAPIInterceptor('get', advancedSupportedURL, HttpResponse.error),
-	withResponse: (response: () => HttpResponse): APIInterceptor =>
+	withResponse: (response: () => HttpResponse<DefaultBodyType>): APIInterceptor =>
 		createAPIInterceptor('get', advancedSupportedURL, response),
 	supported: (): APIInterceptor =>
 		createAPIInterceptor('get', advancedSupportedURL, () =>

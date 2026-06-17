@@ -11,19 +11,19 @@ import OtpSetup from './otp-setup';
 import { useLoginConfigStore } from '../store/login/store';
 import { setup } from '../tests/testUtils';
 
-jest.mock('../store/login/store');
+vi.mock('../store/login/store');
 
 const defaultProps = {
 	otpUri: 'otpauth://totp/Carbonio:user@example.com?secret=ABC123&issuer=Carbonio',
-	onBackToLogin: jest.fn(),
-	onVerifyCode: jest.fn(),
-	onBack: jest.fn()
+	onBackToLogin: vi.fn(),
+	onVerifyCode: vi.fn(),
+	onBack: vi.fn()
 };
 
 describe('OtpSetup', () => {
 	beforeEach(() => {
 		useLoginConfigStore.mockReturnValue({ loginLogo: undefined });
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe('Rendering', () => {
@@ -75,7 +75,7 @@ describe('OtpSetup', () => {
 
 	describe('Actions', () => {
 		test('calls onBackToLogin when back-to-login is clicked', async () => {
-			const onBackToLogin = jest.fn();
+			const onBackToLogin = vi.fn();
 			const { user } = setup(<OtpSetup {...defaultProps} onBackToLogin={onBackToLogin} />);
 			await user.click(screen.getByTestId('back_to_login'));
 			expect(onBackToLogin).toHaveBeenCalledTimes(1);
@@ -93,7 +93,7 @@ describe('OtpSetup', () => {
 		});
 
 		test('calls onVerifyCode with trustDevice false by default', async () => {
-			const onVerifyCode = jest.fn();
+			const onVerifyCode = vi.fn();
 			const { user } = setup(<OtpSetup {...defaultProps} onVerifyCode={onVerifyCode} />);
 			await user.type(screen.getByRole('textbox'), '123456');
 			await user.click(screen.getByTestId('otp_setup_verify'));
@@ -102,7 +102,7 @@ describe('OtpSetup', () => {
 		});
 
 		test('calls onVerifyCode with trustDevice true when checkbox is selected', async () => {
-			const onVerifyCode = jest.fn();
+			const onVerifyCode = vi.fn();
 			const { user } = setup(<OtpSetup {...defaultProps} onVerifyCode={onVerifyCode} />);
 			await user.click(screen.getByText('Remember this device or IP'));
 			await user.type(screen.getByRole('textbox'), '123456');
@@ -111,7 +111,7 @@ describe('OtpSetup', () => {
 		});
 
 		test('calls onVerifyCode on Enter key submit', async () => {
-			const onVerifyCode = jest.fn();
+			const onVerifyCode = vi.fn();
 			const { user } = setup(<OtpSetup {...defaultProps} onVerifyCode={onVerifyCode} />);
 			await user.type(screen.getByRole('textbox'), '123456');
 			await user.keyboard('{Enter}');
@@ -119,7 +119,7 @@ describe('OtpSetup', () => {
 		});
 
 		test('does not call onVerifyCode on Enter key when code is empty', async () => {
-			const onVerifyCode = jest.fn();
+			const onVerifyCode = vi.fn();
 			const { user } = setup(<OtpSetup {...defaultProps} onVerifyCode={onVerifyCode} />);
 			await user.keyboard('{Enter}');
 			expect(onVerifyCode).not.toHaveBeenCalled();

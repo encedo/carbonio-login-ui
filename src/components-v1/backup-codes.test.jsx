@@ -11,13 +11,13 @@ import BackupCodes from './backup-codes';
 import { useLoginConfigStore } from '../store/login/store';
 import { setup } from '../tests/testUtils';
 
-jest.mock('../store/login/store');
+vi.mock('../store/login/store');
 
 const sampleCodes = [{ code: 'AAAA-BBBB' }, { code: 'CCCC-DDDD' }, { code: 'EEEE-FFFF' }];
 
 const defaultProps = {
 	staticOtpCodes: sampleCodes,
-	onLoginToWorkspace: jest.fn(),
+	onLoginToWorkspace: vi.fn(),
 	configuration: undefined
 };
 
@@ -34,10 +34,10 @@ describe('BackupCodes', () => {
 
 	beforeEach(() => {
 		useLoginConfigStore.mockReturnValue({ loginLogo: undefined });
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 
 		originalClipboard = navigator.clipboard;
-		writeTextMock = jest.fn().mockResolvedValue(undefined);
+		writeTextMock = vi.fn().mockResolvedValue(undefined);
 		clipboardMock = { writeText: writeTextMock };
 		Object.defineProperty(navigator, 'clipboard', {
 			get: () => clipboardMock,
@@ -48,9 +48,9 @@ describe('BackupCodes', () => {
 		originalRevokeObjectURL = URL.revokeObjectURL;
 		originalExecCommand = document.execCommand;
 
-		createObjectURLMock = jest.fn().mockReturnValue('blob:mock-url');
-		revokeObjectURLMock = jest.fn();
-		execCommandMock = jest.fn().mockReturnValue(true);
+		createObjectURLMock = vi.fn().mockReturnValue('blob:mock-url');
+		revokeObjectURLMock = vi.fn();
+		execCommandMock = vi.fn().mockReturnValue(true);
 
 		Object.defineProperty(URL, 'createObjectURL', {
 			value: createObjectURLMock,
@@ -141,7 +141,7 @@ describe('BackupCodes', () => {
 		});
 
 		test('calls onLoginToWorkspace when login button is clicked after confirmation', async () => {
-			const onLoginToWorkspace = jest.fn();
+			const onLoginToWorkspace = vi.fn();
 			const { user } = setup(
 				<BackupCodes {...defaultProps} onLoginToWorkspace={onLoginToWorkspace} />
 			);
@@ -163,7 +163,7 @@ describe('BackupCodes', () => {
 		});
 
 		test('downloads backup codes as txt', async () => {
-			const clickSpy = jest
+			const clickSpy = vi
 				.spyOn(HTMLAnchorElement.prototype, 'click')
 				.mockImplementation(() => undefined);
 			const { user } = setup(<BackupCodes {...defaultProps} />);

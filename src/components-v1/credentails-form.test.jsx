@@ -12,7 +12,7 @@ import { setup } from '../tests/testUtils';
 
 describe('CredentialsForm', () => {
 	test('submits user credentials on form submit', async () => {
-		const submitCredentialsMock = jest.fn();
+		const submitCredentialsMock = vi.fn();
 		const configuration = {
 			twoFactorsEnabled: false,
 			domain: 'demo.zextras.io',
@@ -53,7 +53,7 @@ describe('CredentialsForm', () => {
 		setup(
 			<CredentialsForm
 				authError=""
-				submitCredentials={jest.fn()}
+				submitCredentials={vi.fn()}
 				configuration={{ authMethods: ['saml'], destinationUrl: 'https://example.com' }}
 				disableInputs={false}
 				loading={false}
@@ -68,7 +68,7 @@ describe('CredentialsForm', () => {
 		setup(
 			<CredentialsForm
 				authError=""
-				submitCredentials={jest.fn()}
+				submitCredentials={vi.fn()}
 				configuration={{ authMethods: [], destinationUrl: 'https://example.com' }}
 				disableInputs={false}
 				loading={false}

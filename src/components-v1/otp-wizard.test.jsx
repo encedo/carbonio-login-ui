@@ -11,17 +11,17 @@ import OtpWizard from './otp-wizard';
 import { useLoginConfigStore } from '../store/login/store';
 import { setup } from '../tests/testUtils';
 
-jest.mock('../store/login/store');
+vi.mock('../store/login/store');
 
 const defaultProps = {
-	onBackToLogin: jest.fn(),
-	onProceed: jest.fn()
+	onBackToLogin: vi.fn(),
+	onProceed: vi.fn()
 };
 
 describe('OtpWizard', () => {
 	beforeEach(() => {
 		useLoginConfigStore.mockReturnValue({ loginLogo: undefined });
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe('Rendering', () => {
@@ -101,7 +101,7 @@ describe('OtpWizard', () => {
 
 	describe('Back button', () => {
 		test('calls onBackToLogin when back button is clicked', async () => {
-			const onBackToLogin = jest.fn();
+			const onBackToLogin = vi.fn();
 			const { user } = setup(<OtpWizard {...defaultProps} onBackToLogin={onBackToLogin} />);
 			await user.click(screen.getByTestId('back_to_login'));
 			expect(onBackToLogin).toHaveBeenCalledTimes(1);
@@ -202,7 +202,7 @@ describe('OtpWizard', () => {
 
 	describe('Proceed action', () => {
 		test('calls onProceed with the OTP name when proceed button is clicked', async () => {
-			const onProceed = jest.fn();
+			const onProceed = vi.fn();
 			const { user } = setup(<OtpWizard {...defaultProps} onProceed={onProceed} />);
 			const input = screen.getByRole('textbox');
 			await user.type(input, 'MyToken');
@@ -212,14 +212,14 @@ describe('OtpWizard', () => {
 		});
 
 		test('does not call onProceed when proceed button is clicked with empty input', async () => {
-			const onProceed = jest.fn();
+			const onProceed = vi.fn();
 			const { user } = setup(<OtpWizard {...defaultProps} onProceed={onProceed} />);
 			await user.click(screen.getByTestId('otp_wizard_proceed'));
 			expect(onProceed).not.toHaveBeenCalled();
 		});
 
 		test('does not call onProceed when disableInputs is true', async () => {
-			const onProceed = jest.fn();
+			const onProceed = vi.fn();
 			const { user } = setup(<OtpWizard {...defaultProps} onProceed={onProceed} disableInputs />);
 			const input = screen.getByRole('textbox');
 			await user.type(input, 'ValidName');
@@ -228,7 +228,7 @@ describe('OtpWizard', () => {
 		});
 
 		test('calls onProceed via form submit (Enter key)', async () => {
-			const onProceed = jest.fn();
+			const onProceed = vi.fn();
 			const { user } = setup(<OtpWizard {...defaultProps} onProceed={onProceed} />);
 			const input = screen.getByRole('textbox');
 			await user.type(input, 'MyToken');
@@ -238,7 +238,7 @@ describe('OtpWizard', () => {
 		});
 
 		test('does not call onProceed on Enter key when input is invalid', async () => {
-			const onProceed = jest.fn();
+			const onProceed = vi.fn();
 			const { user } = setup(<OtpWizard {...defaultProps} onProceed={onProceed} />);
 			const input = screen.getByRole('textbox');
 			await user.type(input, 'bad name!');

@@ -9,10 +9,11 @@ import { screen, within, waitFor } from '@testing-library/react';
 
 import ChangePasswordForm from './change-password-form';
 import { setup } from '../tests/testUtils';
+import { saveCredentials, setCookie } from '../utils';
 
-jest.mock('../utils', () => ({
-	saveCredentials: jest.fn(),
-	setCookie: jest.fn()
+vi.mock('../utils', () => ({
+	saveCredentials: vi.fn(),
+	setCookie: vi.fn()
 }));
 
 describe('ChangePasswordForm', () => {
@@ -20,7 +21,7 @@ describe('ChangePasswordForm', () => {
 		setup(
 			<ChangePasswordForm
 				isLoading={false}
-				setIsLoading={jest.fn()}
+				setIsLoading={vi.fn()}
 				username="testuser"
 				configuration={{ destinationUrl: '/home' }}
 			/>
@@ -37,7 +38,7 @@ describe('ChangePasswordForm', () => {
 		const { user } = setup(
 			<ChangePasswordForm
 				isLoading={false}
-				setIsLoading={jest.fn()}
+				setIsLoading={vi.fn()}
 				username="testuser"
 				configuration={{ destinationUrl: '/home' }}
 			/>
@@ -66,7 +67,7 @@ describe('ChangePasswordForm', () => {
 		const { user } = setup(
 			<ChangePasswordForm
 				isLoading={false}
-				setIsLoading={jest.fn()}
+				setIsLoading={vi.fn()}
 				username="testuser"
 				configuration={{ destinationUrl: '/home' }}
 			/>
@@ -90,19 +91,19 @@ describe('ChangePasswordForm', () => {
 		const mockAuthToken = 'mockAuthToken';
 		const mockResponse = {
 			status: 200,
-			json: jest.fn().mockResolvedValue({
+			json: vi.fn().mockResolvedValue({
 				Body: { ChangePasswordResponse: { authToken: [{ _content: mockAuthToken }] } }
 			})
 		};
-		jest.spyOn(window, 'fetch').mockResolvedValue(mockResponse);
+		vi.spyOn(window, 'fetch').mockResolvedValue(mockResponse);
 
-		const saveCredentialsMock = jest.requireMock('../utils').saveCredentials;
-		const setCookieMock = jest.requireMock('../utils').setCookie;
+		const saveCredentialsMock = saveCredentials;
+		const setCookieMock = setCookie;
 
 		const { user } = setup(
 			<ChangePasswordForm
 				isLoading={false}
-				setIsLoading={jest.fn()}
+				setIsLoading={vi.fn()}
 				username="testuser"
 				configuration={{ destinationUrl: '' }}
 			/>
