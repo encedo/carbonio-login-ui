@@ -392,7 +392,11 @@ export default function PageLayout({
 											label={t('login_oidc', 'Login with Encedo')}
 											color="primary"
 											onClick={(): void => {
-												window.location.assign(`/oidc/authorize?redirectUrl=${destinationUrl}`);
+												// The connector's /oidc/authorize reads only ?domain= (see oidc.py);
+												// redirectUrl was never consumed, and an empty destinationUrl put a
+												// literal "null" in the URL. After SSO the connector redirects to
+												// its configured login_redirect.
+												window.location.assign('/oidc/authorize');
 											}}
 										/>
 									</Row>
