@@ -14,7 +14,10 @@ export const OidcErrorPage = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const urlParams = new URLSearchParams(window.location.search);
 	const errorMessage = urlParams.get('oidcError') ?? urlParams.get('error') ?? '';
-	const loginUrl = `${window.location.protocol}//${window.location.hostname}`;
+	// origin = protocol + hostname + port. Building it by hand from protocol and
+	// hostname dropped the port, so on a non-default port (e.g. https://mail:8443)
+	// "Back to login page" navigated to the wrong URL.
+	const loginUrl = window.location.origin;
 
 	return (
 		<Container gap={'10px'} orientation={'vertical'} mainAlignment={'center'} background={'gray5'}>
