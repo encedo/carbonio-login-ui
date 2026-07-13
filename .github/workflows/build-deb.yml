@@ -14,11 +14,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Upstream migrated npm -> pnpm (zextras#164): package-lock.json is gone,
+      # pnpm-lock.yaml is the lockfile. Must run BEFORE setup-node, otherwise
+      # cache: 'pnpm' cannot resolve the pnpm store path.
+      # Version comes from "packageManager" in package.json (pnpm@10.32.1).
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '22'      # package.json engines: node v22
+          cache: 'pnpm'
 
       - name: Read version
         id: version
@@ -30,10 +37,10 @@ jobs:
           echo "deb=carbonio-login-ui_${VERSION}_all.deb" >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
 
       - name: Package .deb
         run: |
