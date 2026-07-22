@@ -171,10 +171,19 @@ export default function PageLayout({
 	const [showMobileAppModal, setShowMobileAppModal] = useState(true);
 	const [doNotShowAgain, setDoNotShowAgain] = useState(false);
 	const [oidcAvailable, setOidcAvailable] = useState(false);
+	const [oidcButtonLabel, setOidcButtonLabel] = useState('');
 
 	useEffect(() => {
 		fetch('/oidc/health', { method: 'GET' })
-			.then((r) => setOidcAvailable(r.ok))
+			.then((r) => {
+				setOidcAvailable(r.ok);
+				// The connector may advertise a configurable button label; a healthy
+				// response without a JSON body just keeps the default.
+				return r.ok ? r.json().catch(() => null) : null;
+			})
+			.then((data) => {
+				if (data?.button_label) setOidcButtonLabel(data.button_label);
+			})
 			.catch(() => setOidcAvailable(false));
 	}, []);
 	const screenMode = useScreenMode();
@@ -389,7 +398,7 @@ export default function PageLayout({
 										<Button
 											type="outlined"
 											data-testid="loginOidc"
-											label={t('login_oidc', 'Login with Encedo')}
+											label={oidcButtonLabel || t('login_oidc', 'Login with Encedo')}
 											color="primary"
 											onClick={(): void => {
 												// The connector's /oidc/authorize reads only ?domain= (see oidc.py);

@@ -57,6 +57,24 @@ describe('OIDC SSO button', () => {
 		expect(await screen.findByTestId('loginOidc')).toBeInTheDocument();
 	});
 
+	it('uses the connector button_label when provided', async () => {
+		createAPIInterceptor('get', HEALTH_URL, () =>
+			HttpResponse.json({ status: 'ok', button_label: 'Sign in with Encedo HSM' })
+		);
+
+		setup(<PageLayout version={1} isAdvanced={false} />);
+
+		expect(await screen.findByTestId('loginOidc')).toHaveTextContent('Sign in with Encedo HSM');
+	});
+
+	it('falls back to the default label when button_label is absent', async () => {
+		createAPIInterceptor('get', HEALTH_URL, () => HttpResponse.json({ status: 'ok' }));
+
+		setup(<PageLayout version={1} isAdvanced={false} />);
+
+		expect(await screen.findByTestId('loginOidc')).toHaveTextContent('Login with Encedo');
+	});
+
 	it('navigates to /oidc/authorize with no query string when clicked', async () => {
 		oidcHealthApi.available();
 
