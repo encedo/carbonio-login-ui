@@ -1,3 +1,22 @@
+## <small>0.11.5 (2026-08-16)</small>
+
+* fix(ci): cap vitest forks to 2 to prevent k8s CPU saturation (#213) ([ae4f9a1](https://github.com/zextras/carbonio-login-ui/commit/ae4f9a1)), closes [#213](https://github.com/zextras/carbonio-login-ui/issues/213)
+* chore(deps): lock file maintenance (#178) ([91455a2](https://github.com/zextras/carbonio-login-ui/commit/91455a2)), closes [#178](https://github.com/zextras/carbonio-login-ui/issues/178)
+* chore(deps): lock file maintenance (#183) ([7d39324](https://github.com/zextras/carbonio-login-ui/commit/7d39324)), closes [#183](https://github.com/zextras/carbonio-login-ui/issues/183)
+* chore(deps): update commitlint to v17.8.1 (#190) ([c151be1](https://github.com/zextras/carbonio-login-ui/commit/c151be1)), closes [#190](https://github.com/zextras/carbonio-login-ui/issues/190)
+* chore(deps): update dependency @testing-library/user-event to v14.6.1 (#200) ([4d1b4d9](https://github.com/zextras/carbonio-login-ui/commit/4d1b4d9)), closes [#200](https://github.com/zextras/carbonio-login-ui/issues/200)
+* chore(deps): update dependency @types/faker to v5.5.9 (#191) ([d3cac6e](https://github.com/zextras/carbonio-login-ui/commit/d3cac6e)), closes [#191](https://github.com/zextras/carbonio-login-ui/issues/191)
+* chore(deps): update dependency autoprefixer to v10.5.1 (#193) ([6643492](https://github.com/zextras/carbonio-login-ui/commit/6643492)), closes [#193](https://github.com/zextras/carbonio-login-ui/issues/193)
+* chore(deps): update dependency css-loader to v5.2.7 (#194) ([cb72b01](https://github.com/zextras/carbonio-login-ui/commit/cb72b01)), closes [#194](https://github.com/zextras/carbonio-login-ui/issues/194)
+* chore(deps): update dependency sonarqube-scanner to v4.3.6 (#181) ([01f4781](https://github.com/zextras/carbonio-login-ui/commit/01f4781)), closes [#181](https://github.com/zextras/carbonio-login-ui/issues/181)
+* chore(deps): update dependency zextras/jenkins-lib-common to v2.11.3 (#195) ([38a00b7](https://github.com/zextras/carbonio-login-ui/commit/38a00b7)), closes [#195](https://github.com/zextras/carbonio-login-ui/issues/195)
+* chore(deps): update dependency zextras/jenkins-lib-common to v4.1.4 (#212) ([b65ba65](https://github.com/zextras/carbonio-login-ui/commit/b65ba65)), closes [#212](https://github.com/zextras/carbonio-login-ui/issues/212)
+* chore(deps): update postcss to v8.5.15 (#182) ([8d804bf](https://github.com/zextras/carbonio-login-ui/commit/8d804bf)), closes [#182](https://github.com/zextras/carbonio-login-ui/issues/182)
+* chore(deps): update react (#184) ([498f35b](https://github.com/zextras/carbonio-login-ui/commit/498f35b)), closes [#184](https://github.com/zextras/carbonio-login-ui/issues/184)
+* chore(deps): update semantic-release monorepo (#185) ([64f3074](https://github.com/zextras/carbonio-login-ui/commit/64f3074)), closes [#185](https://github.com/zextras/carbonio-login-ui/issues/185)
+* chore(deps): update vitest to v4.1.9 (#186) ([d2d93c3](https://github.com/zextras/carbonio-login-ui/commit/d2d93c3)), closes [#186](https://github.com/zextras/carbonio-login-ui/issues/186)
+* chore(deps): update webpack (#202) ([5d47c24](https://github.com/zextras/carbonio-login-ui/commit/5d47c24)), closes [#202](https://github.com/zextras/carbonio-login-ui/issues/202)
+
 ## <small>0.11.4 (2026-06-02)</small>
 
 * build: migrate to buildah (FQDN images + jenkins-lib-common@2.10.0) (#180) ([3c5fef4](https://github.com/zextras/carbonio-login-ui/commit/3c5fef4)), closes [#180](https://github.com/zextras/carbonio-login-ui/issues/180)
